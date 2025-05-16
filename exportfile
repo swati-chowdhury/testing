@@ -1,0 +1,46 @@
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
+import pandas as pd
+import seaborn as sns
+import os
+
+# Set up the basic structure for the swimlane diagram
+swimlanes = ["Strategic Planning", "Tactical Planning", "Budget Allocation", "Campaign Execution", "Performance Reporting"]
+roles = ["Marketing Leaders", "Marketing Managers", "Marketing Ops", "Finance", "Tools"]
+
+# Create a dataframe to hold process steps
+data = {
+    ("Strategic Planning", "Marketing Leaders"): "Define business priorities\n(Airtable)",
+    ("Strategic Planning", "Tools"): "Airtable",
+    
+    ("Tactical Planning", "Marketing Managers"): "Break down programs and tactics\n(Allocadia)",
+    ("Tactical Planning", "Marketing Ops"): "Clean & map data to campaigns\n(Allocadia)",
+    ("Tactical Planning", "Tools"): "Allocadia",
+    
+    ("Budget Allocation", "Finance"): "Distribute budget by org\n(Anaplan)",
+    ("Budget Allocation", "Marketing Ops"): "Map to campaign-level spend\n(Allocadia)",
+    ("Budget Allocation", "Tools"): "Anaplan, Excel",
+    
+    ("Campaign Execution", "Marketing Managers"): "Setup assets & audience\n(Marketo, Segment)",
+    ("Campaign Execution", "Marketing Ops"): "Ensure ID consistency\n(Salesforce, Marketo)",
+    ("Campaign Execution", "Tools"): "Marketo, Salesforce, Segment",
+    
+    ("Performance Reporting", "Marketing Leaders"): "Review ROI dashboards\n(Tableau, Snowflake)",
+    ("Performance Reporting", "Marketing Ops"): "Manual stitching of plan vs actuals\n(Excel)",
+    ("Performance Reporting", "Tools"): "Snowflake, Tableau, Excel"
+}
+
+# Convert to structured list
+rows = []
+for (stage, role), desc in data.items():
+    rows.append({"Stage": stage, "Role": role, "Description": desc})
+
+df = pd.DataFrame(rows)
+
+# Export to CSV for editing in Lucidchart, Miro, or Figma
+output_path = "/mnt/data/Marketing_Planning_Current_State.csv"
+df.to_csv(output_path, index=False)
+
+import ace_tools as tools; tools.display_dataframe_to_user(name="Marketing Planning Current State", dataframe=df)
+
+output_path
